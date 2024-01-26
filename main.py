@@ -51,8 +51,8 @@ def get_details(url):
         company = model.split()[0]
         print(company)
 
-        price = soup.find('span', class_="a-price-whole").text
-        print(price)
+        cost = soup.find('span', class_="a-price-whole").text
+        print(cost)
         offer = soup.find(
             'span',
             class_="a-size-large a-color-price savingPriceOverride aok-align-center reinventPriceSavingsPercentageMargin savingsPercentage"
@@ -78,7 +78,25 @@ def get_details(url):
             id="acrCustomerReviewText"
         ).text.split()[0]
         print(reviews)
+        
+        data_dict = {
+            'Company':company,
+            'Model':model,
+            'Cost':cost,
+            'Offer':offer,
+            'In Stock':availability,
+            'Rating':rating,
+            'Reviews':reviews
+        }
 
+        master_list.append(data_dict)
+
+
+def create_excel():
+    print()
+
+
+master_list = []
 
 pages = 1
 for page in range(pages):
@@ -86,3 +104,5 @@ for page in range(pages):
     for url in product_urls:
         get_details(url)
         break
+
+print(master_list)
