@@ -91,8 +91,7 @@ def get_details(url):
         try:
             rating = (
                 soup.find("span", {"data-hook": "rating-out-of-text"})
-                .text.strip()
-                .split()[0]
+                .text.strip().split()[0]
             )
         except:
             rating = "-"
