@@ -16,7 +16,7 @@ def get_product_urls(page_num):
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        html = response.text
+        html = response.content
         soup = BeautifulSoup(html, "lxml")
         product_links = soup.find_all(
             "a",
@@ -50,56 +50,55 @@ def get_details(url):
         try:
             model = soup.find("span", id="productTitle").text.strip()
         except:
-            model = "-"
+            model = '-'
 
         try:
-            if model.split()[0][0] == "(":
+            if model.split()[0][0] == '(':
                 company = model.split()[1]
             else:
                 company = model.split()[0]
         except:
-            company = "-"
+            company = '-'
 
         try:
             cost = soup.find("span", class_="a-price-whole").text
         except:
-            cost = "-"
+            cost = '-'
 
         try:
             offer = soup.find(
                 "span",
-                class_="a-size-large a-color-price savingPriceOverride aok-align-center reinventPriceSavingsPercentageMargin savingsPercentage",
+                class_="a-size-large a-color-price savingPriceOverride aok-align-center reinventPriceSavingsPercentageMargin savingsPercentage"
             ).text
         except:
-            offer = "-"
+            offer = '-'
 
         try:
-            availabilitytxt = soup.find("div", id="availability").text
+            availabilitytxt = soup.find("div", id="availability").find('span').text
             availability = availabilitytxt == " In stock "
-
+            
             if availability == False:
-                if availabilitytxt.strip().split()[0] == "Only":
+                if availabilitytxt.strip().split()[0] == 'Only':
                     availability = True
                 else:
                     pass
             else:
-                pass
+                pass    
 
         except:
-            availability = "-"
+            availability = '-'
 
         try:
-            rating = (
-                soup.find("span", {"data-hook": "rating-out-of-text"})
-                .text.strip().split()[0]
-            )
+            rating = soup.find(
+                "span", {'data-hook':"rating-out-of-text"}
+            ).text.strip().split()[0]
         except:
-            rating = "-"
+            rating = '-'
 
         try:
             reviews = soup.find("span", id="acrCustomerReviewText").text.split()[0]
         except:
-            reviews = "-"
+            reviews = '-'
 
         data_dict = {
             "Company": company,
@@ -119,6 +118,7 @@ def get_details(url):
 
 def create_excel():
     dataframe = pd.DataFrame(master_list)
+    dataframe.index += 1
 
     try:
         dataframe.to_csv("Amazon product data.csv")
@@ -134,13 +134,13 @@ def create_excel():
 start_time = time.time()
 
 master_list = []
-pages = 1
+pages = 2
 
 print("Colecting Data...Please wait...")
-for page in range(1, pages + 1):
+for page in range(1,pages+1):
     product_urls = get_product_urls(page)
     for url in product_urls:
         get_details(url)
-        time.sleep(1.75)
+        time.sleep(1.5)
 
 create_excel()
