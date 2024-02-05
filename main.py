@@ -134,7 +134,7 @@ def create_excel():
 start_time = time.time()
 
 master_list = []
-pages = 2
+pages = int(input('Enter the Number of Pages : '))
 
 print("Colecting Data...Please wait...")
 for page in range(1,pages+1):
