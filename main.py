@@ -110,7 +110,8 @@ def get_details(url):
             "Reviews": reviews,
         }
 
-        master_list.append(data_dict)
+        if data_dict['company'] != '-' and data_dict['model'] != '-':
+            master_list.append(data_dict)
 
     else:
         print(f"Status Code : {response.status_code} \nFailed to get data from {url}")
@@ -136,7 +137,7 @@ start_time = time.time()
 master_list = []
 pages = int(input('Enter the Number of Pages : '))
 
-print("Colecting Data...Please wait...")
+print("Collecting Data...Please wait...")
 for page in range(1,pages+1):
     product_urls = get_product_urls(page)
     for url in product_urls:
@@ -144,3 +145,5 @@ for page in range(1,pages+1):
         time.sleep(1.5)
 
 create_excel()
+
+input('Press Enter To Proceed...')
