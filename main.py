@@ -110,7 +110,7 @@ def get_details(url):
             "Reviews": reviews,
         }
 
-        if data_dict['company'] != '-' and data_dict['model'] != '-':
+        if data_dict["Company"] != '-' and data_dict["Model"] != '-':
             master_list.append(data_dict)
 
     else:
